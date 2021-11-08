@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+{% block body %}
+<div class="container">
+    <h1>{{message.text}}</h1>
+    <h3>Project 4 </h3>
+
+    <div class="alert-info">
+        {% if not message['username'] %}
+        <h5> Please login first to use this portal!</h5>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

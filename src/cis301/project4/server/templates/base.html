@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="{{url_for('static', filename = 'css/bootstrap.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename = 'css/main.css')}}" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-danger">
+  <div class="container">
+
+      <a class="navbar-brand" href="/home">CIS301</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/user/search">Search</a>
+      </li>
+    </ul>
+  </div>
+
+  </div>
+    {% if message['username'] %}
+      <a href="{{ url_for('logout') }}"><button class="btn btn-light navbar-btn">Log out</button> </a>
+    {% else %}
+      <a href="{{ url_for('authenticate') }}"><button class="btn btn-light navbar-btn m-1">Login</button> </a>
+      <a href="{{ url_for('register') }}"><button class="btn btn-light navbar-btn">Register</button> </a>
+
+    {% endif %}
+
+</nav>
+
+<main role="main" class="container">
+
+
+{% block body %}
+
+
+{% endblock %}
+
+</main>
+<footer class="footer  align-content-center">
+  <div class="container">
+    <span class="text-muted">&copy;CIS301 {{message.date}}</span>
+  </div>
+</footer>
+
+<script src="{{url_for('static', filename='js/jquery-3.5.1.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/main.js')}}"></script>
+
+</body>
+</html>

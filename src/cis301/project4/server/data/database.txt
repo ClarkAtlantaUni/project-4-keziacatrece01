@@ -1,0 +1,26 @@
+{
+  "phonebills":
+  [
+    {
+    "phonebill_id":"uudi",
+    "customer": "name",
+      "phonecall":
+      [
+        {
+          "phonecall_id":"uuid",
+          "caller":"123-154-3456",
+          "callee":"123-154-3456",
+          "start-date":"10/20/2020 13:45",
+          "end-date":"10/20/2020 13:50"
+        },
+        {
+          "phonecall_id":"uuid",
+          "caller":"123-154-3456",
+          "callee":"123-154-3456",
+          "start-date":"11/01/2020 13:45",
+          "end-date":"11/01/2020 13:50"
+        }
+      ]
+    }
+  ]
+}
