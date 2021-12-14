@@ -5,22 +5,48 @@ from hashlib import md5
 from cis301.phonebill.phonebill_doa import AbstractPhoneBill_DOA
 from cis301.phonebill.phonecall_doa import AbstractPhoneCall_DOA
 
-# TODO Finish Implementing the abstract methods
+
+
+from cis301.project4 import phonecall, phonebill
+
 
 class PhoneBill_DOA(AbstractPhoneBill_DOA, AbstractPhoneCall_DOA):
     def __init__(self, dbfile):
         self.dbfile = dbfile
 
     def insert_phonebill(self, phonebill):
-        pass
+        conn = sqlite3.connect(self.dbfile)
+        c = conn.cursor()
+        data = (phonebill.get_phonebill(), phonebill.get_callee(), phonebill.get_starttime_string(),
+                phonebill.get_endtime_string())
+        c.execute('INSERT INTO phonebills ( caller,callee, startdate, enddate) VALUES (?,?,?,?);', data)
+        conn.commit()
+        pid = c.lastrowid
+        data = (phonebill.get_uid(), pid)
+        c.execute('INSERT INTO phonebills ( uid, pid ) VALUES (?,?);', data)
+        conn.commit()
+        conn.close()
+        return pid
 
     def update_phonebill(self, phonebill):
         pass
 
-    def delete_phonebill(self, phonebill):
+
+    def delete_phonebill(self, phonebill, phonebill_id=None):
+        """
+        conn = sqlite3.connect(self.dbfile)
+
+        c = conn.cursor()
+        data = phonebill_id
+        c.execute('DELETE from phonecall where id=?;', data)
+        conn.commit()
+        c.execute('DELETE from phonebills where pid=?;', data)
+        conn.commit()
+        conn.close()
+        """
         pass
 
-    def select_phonebill(self, phonebill_id):
+    def select_phonebill(self, phonebill_id, my_list=None):
         pass
 
     def search_phonebills_bydate(self, startdate, enddate):
@@ -40,13 +66,39 @@ class PhoneBill_DOA(AbstractPhoneBill_DOA, AbstractPhoneCall_DOA):
         return pid
 
     def update_phonecall(self, phonecall):
-        pass
+        conn = sqlite3.connect(self.dbfile)
+        c = conn.cursor()
+        data = (phonecall.get_caller(), phonecall.get_callee(),phonecall.get_starttime_string(), phonecall.get_endtime_string(), phonecall.get_uid())
+        c.execute('update phonecalls set  caller = ?, callee = ?, startdate=?, enddate=? where id = ?;', data)
+        conn.commit()
+        pid = c.lastrowid
+        data = (phonecall.get_uid(), pid)
+        c.execute('UPDATE phonebills ( uid, pid ) VALUES (?,?);', data)
+        conn.commit()
+        conn.close()
+        return pid
 
-    def delete_phonecall(self, phonecall):
-        pass
+    def delete_phonecall(self, phonecall_id, uid):
+        conn = sqlite3.connect(self.dbfile)
+        c = conn.cursor()
+        data = (phonecall_id,)
+        c.execute('DELETE from phonecalls where id=?;', data)
+        conn.commit()
+        data = (phonecall_id, uid)
+        c.execute('DELETE from phonebills where pid=? and uid=?;', data)
+        conn.commit()
+        conn.close()
 
-    def select_phonecall(self, phonecall_id):
-        pass
+    def select_phonecall(self, uid):
+        conn = sqlite3.connect(self.dbfile)
+        c = conn.cursor()
+        c.execute('SELECT u.name, u.email, phonecalls.id, phonecalls.caller, phonecalls.callee, phonecalls.startdate,phonecalls.enddate\
+                  from phonecalls\
+                  JOIN phonebills p on phonecalls.id = p.pid\
+                  JOIN users u on u.id = p.uid\
+                  WHERE u.id =?', (uid,))
+        return c.fetchall()
+
 
     def search_phonecalls_bydate(self, startdate, enddate):
         pass
